@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Home | Lokal Booking Drammen{% endblock %}
 
@@ -11,5 +12,25 @@
 	{% else %}
 		<p><a class="btn" href="{% url 'login' %}">Log in</a> to start booking resources.</p>
 	{% endif %}
+</section>
+
+<section class="card">
+	<h2>Drammen gallery</h2>
+	<p>Add free-licensed Drammen photos to <strong>static/img/drammen/</strong> and they will appear here.</p>
+	<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;">
+		<figure style="margin:0;">
+			<img src="{% static 'img/drammen/photo-1.jpg' %}" alt="Drammen city view" style="width:100%;height:160px;object-fit:cover;background:#dbeafe;border-radius:8px;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+			<div style="display:none;height:160px;border-radius:8px;background:linear-gradient(135deg,#dbeafe,#bfdbfe);padding:12px;">Add photo-1.jpg</div>
+		</figure>
+		<figure style="margin:0;">
+			<img src="{% static 'img/drammen/photo-2.jpg' %}" alt="Drammen river view" style="width:100%;height:160px;object-fit:cover;background:#dcfce7;border-radius:8px;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+			<div style="display:none;height:160px;border-radius:8px;background:linear-gradient(135deg,#dcfce7,#bbf7d0);padding:12px;">Add photo-2.jpg</div>
+		</figure>
+		<figure style="margin:0;">
+			<img src="{% static 'img/drammen/photo-3.jpg' %}" alt="Drammen bridge view" style="width:100%;height:160px;object-fit:cover;background:#fef3c7;border-radius:8px;" onerror="this.style.display='none';this.nextElementSibling.style.display='block';">
+			<div style="display:none;height:160px;border-radius:8px;background:linear-gradient(135deg,#fef3c7,#fde68a);padding:12px;">Add photo-3.jpg</div>
+		</figure>
+	</div>
+	<p style="margin-top:10px;">Remember to update image credits in <strong>docs/image-attribution.md</strong>.</p>
 </section>
 {% endblock %}
