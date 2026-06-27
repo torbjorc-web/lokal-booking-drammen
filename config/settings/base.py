@@ -102,8 +102,11 @@ AUTH_USER_MODEL = "accounts.User"
 
 LOGIN_REDIRECT_URL = "dashboard:index"
 LOGOUT_REDIRECT_URL = "home"
+LOGIN_URL = "login"
 
 EMAIL_BACKEND = env(
 	"DJANGO_EMAIL_BACKEND",
 	"django.core.mail.backends.console.EmailBackend",
 )
+
+DEFAULT_FROM_EMAIL = env("DJANGO_DEFAULT_FROM_EMAIL", "no-reply@lokal-booking-drammen.local")

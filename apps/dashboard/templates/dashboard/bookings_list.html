@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard bookings{% endblock %}
+
+{% block content %}
+<section class="card">
+	<h1>Bookings</h1>
+	<form method="get">
+		<label for="status">Status</label>
+		<select id="status" name="status">
+			<option value="">All</option>
+			{% for value, label in status_choices %}
+				<option value="{{ value }}" {% if filters.status == value %}selected{% endif %}>{{ label }}</option>
+			{% endfor %}
+		</select>
+		<button type="submit">Filter</button>
+	</form>
+</section>
+
+<section class="card">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Resource</th>
+				<th>User</th>
+				<th>Title</th>
+				<th>Status</th>
+				<th>Time</th>
+				<th>Actions</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for booking in bookings %}
+			<tr>
+				<td>{{ booking.id }}</td>
+				<td>{{ booking.resource.name }}</td>
+				<td>{{ booking.user.username }}</td>
+				<td>{{ booking.title }}</td>
+				<td>{{ booking.status }}</td>
+				<td>{{ booking.starts_at }} - {{ booking.ends_at }}</td>
+				<td>
+					<form class="inline-form" method="post" action="{% url 'dashboard:bookings_set_status' booking.id %}">
+						{% csrf_token %}
+						<input type="hidden" name="status" value="confirmed">
+						<button type="submit">Approve</button>
+					</form>
+					<form class="inline-form" method="post" action="{% url 'dashboard:bookings_set_status' booking.id %}">
+						{% csrf_token %}
+						<input type="hidden" name="status" value="canceled">
+						<button class="btn-secondary" type="submit">Reject</button>
+					</form>
+					<a class="btn btn-secondary" href="{% url 'dashboard:bookings_edit' booking.id %}">Edit</a>
+				</td>
+			</tr>
+			{% empty %}
+			<tr><td colspan="7">No bookings found.</td></tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</section>
+{% endblock %}

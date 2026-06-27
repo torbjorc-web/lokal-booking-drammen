@@ -6,4 +6,6 @@ app_name = "bookings"
 
 urlpatterns = [
 	path("", views.index, name="index"),
+	path("create/", views.create, name="create"),
+	path("<int:booking_id>/cancel/", views.cancel, name="cancel"),
 ]

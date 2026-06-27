@@ -9,6 +9,9 @@ class Resource(models.Model):
 	opening_time = models.TimeField()
 	closing_time = models.TimeField()
 	max_booking_days_ahead = models.PositiveIntegerField(default=90)
+	max_booking_duration_minutes = models.PositiveIntegerField(default=180)
+	cancellation_deadline_hours = models.PositiveIntegerField(default=24)
+	requires_approval = models.BooleanField(default=True)
 	is_active = models.BooleanField(default=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 	updated_at = models.DateTimeField(auto_now=True)
@@ -23,6 +26,10 @@ class Resource(models.Model):
 			models.CheckConstraint(
 				check=models.Q(max_booking_days_ahead__gte=1),
 				name="resource_max_booking_days_ahead_gte_1",
+			),
+			models.CheckConstraint(
+				check=models.Q(max_booking_duration_minutes__gte=1),
+				name="resource_max_duration_minutes_gte_1",
 			),
 		]
 

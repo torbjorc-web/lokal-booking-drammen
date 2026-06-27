@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Home | Lokal Booking Drammen{% endblock %}
+
+{% block content %}
+<section class="card">
+	<h1>Lokal Booking Drammen</h1>
+	<p>Booking app for local organizations in Drammen.</p>
+	{% if request.user.is_authenticated %}
+		<p><a class="btn" href="{% url 'bookings:create' %}">Create booking</a></p>
+	{% else %}
+		<p><a class="btn" href="{% url 'login' %}">Log in</a> to start booking resources.</p>
+	{% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<section class="card">
+	<h1>Admin dashboard</h1>
+	<p><a class="btn" href="{% url 'dashboard:bookings' %}">Manage bookings</a> <a class="btn btn-secondary" href="{% url 'dashboard:bookings_export_csv' %}">Export CSV</a></p>
+</section>
+
+<section class="card">
+	<h2>Stats</h2>
+	<ul>
+		<li>Total: {{ metrics.total }}</li>
+		<li>Pending: {{ metrics.pending }}</li>
+		<li>Confirmed: {{ metrics.confirmed }}</li>
+		<li>Canceled: {{ metrics.canceled }}</li>
+	</ul>
+	<h3>By resource</h3>
+	<ul>
+		{% for item in metrics.by_resource %}
+			<li>{{ item.resource__name }}: {{ item.total }}</li>
+		{% empty %}
+			<li>No booking data yet.</li>
+		{% endfor %}
+	</ul>
+</section>
+{% endblock %}

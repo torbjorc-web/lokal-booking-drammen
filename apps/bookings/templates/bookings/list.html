@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}My bookings{% endblock %}
+
+{% block content %}
+<section class="card">
+	<h1>My bookings</h1>
+	<p><a class="btn" href="{% url 'bookings:create' %}">New booking</a></p>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Resource</th>
+				<th>Title</th>
+				<th>Status</th>
+				<th>Starts</th>
+				<th>Ends</th>
+				<th>Action</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for booking in bookings %}
+			<tr>
+				<td>{{ booking.resource.name }}</td>
+				<td>{{ booking.title }}</td>
+				<td>{{ booking.status }}</td>
+				<td>{{ booking.starts_at }}</td>
+				<td>{{ booking.ends_at }}</td>
+				<td>
+					{% if booking.status != "canceled" %}
+					<form class="inline-form" action="{% url 'bookings:cancel' booking.id %}" method="post">
+						{% csrf_token %}
+						<button class="btn-secondary" type="submit">Cancel</button>
+					</form>
+					{% endif %}
+				</td>
+			</tr>
+			{% empty %}
+			<tr><td colspan="6">No bookings yet.</td></tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</section>
+{% endblock %}
