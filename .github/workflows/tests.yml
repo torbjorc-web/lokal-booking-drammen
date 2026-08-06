@@ -1,12 +1,11 @@
 name: Deprecated Tests Workflow
-
-"on":
+on:
   workflow_dispatch:
 
 jobs:
   noop:
-    runs-on: ubuntu-latest
     if: ${{ false }}
+    runs-on: ubuntu-latest
     steps:
       - name: Deprecated workflow placeholder
         run: echo "This workflow is intentionally disabled. Use ci.yml instead."
