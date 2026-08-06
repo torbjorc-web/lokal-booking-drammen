@@ -43,24 +43,24 @@ The app replaces manual spreadsheets and email threads with a structured workflo
 
 ## Project structure
 
-```
+```text
 lokal-booking-drammen/
-	apps/
-		accounts/
-		resources/
-		bookings/
-		notifications/
-		dashboard/
-	config/
-		settings/
-			base.py
-			development.py
-			production.py
-	templates/
-	static/
-	docs/
-	render.yaml
-	build.sh
+  apps/
+    accounts/
+    resources/
+    bookings/
+    notifications/
+    dashboard/
+  config/
+    settings/
+      base.py
+      development.py
+      production.py
+  templates/
+  static/
+  docs/
+  render.yaml
+  build.sh
 ```
 
 ## Local development
@@ -69,32 +69,32 @@ lokal-booking-drammen/
 
 Windows PowerShell:
 
-```
+```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 ```
 
 ### 2. Install dependencies
 
-```
+```bash
 pip install -r requirements.txt
 ```
 
 ### 3. Run migrations
 
-```
+```bash
 python manage.py migrate
 ```
 
 ### 4. Create admin user
 
-```
+```bash
 python manage.py createsuperuser
 ```
 
 ### 5. Start development server
 
-```
+```bash
 python manage.py runserver
 ```
 
@@ -104,7 +104,7 @@ App runs at `http://127.0.0.1:8000/`.
 
 Run all tests:
 
-```
+```bash
 python manage.py test
 ```
 
@@ -132,8 +132,8 @@ This repository includes `render.yaml` and `build.sh` for Blueprint deployment.
 2. Click `New` -> `Blueprint`.
 3. Select this repository.
 4. Render creates:
-	 - web service `lokal-booking-drammen`
-	 - PostgreSQL database `lokal-booking-drammen-db`
+   - web service `lokal-booking-drammen`
+   - PostgreSQL database `lokal-booking-drammen-db`
 
 ### 2. Environment variables
 
