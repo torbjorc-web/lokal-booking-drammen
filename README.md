@@ -1,5 +1,7 @@
 # Lokal Booking Drammen
 
+[![CI](https://github.com/torbjorc-web/lokal-booking-drammen/actions/workflows/ci.yml/badge.svg)](https://github.com/torbjorc-web/lokal-booking-drammen/actions/workflows/ci.yml)
+
 Lokal Booking Drammen is a fullstack Django booking application for local clubs, volunteer organizations, and small course providers.
 
 The app replaces manual spreadsheets and email threads with a structured workflow for resource booking, approval, status tracking, and administration.
