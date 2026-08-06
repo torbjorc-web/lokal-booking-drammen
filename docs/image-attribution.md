@@ -4,7 +4,7 @@ Use only images with explicit free licenses for commercial web use.
 
 ## Recommended source
 
-- Wikimedia Commons: https://commons.wikimedia.org/
+- Wikimedia Commons: [https://commons.wikimedia.org/](https://commons.wikimedia.org/)
 
 Search for Drammen images and verify each file's individual license page.
 
@@ -37,19 +37,19 @@ Example:
 ## Drammen photos used on home page
 
 - Local file: `static/img/drammen/photo-1.jpg`
-	- Source title: Drammen solnedgang 1
-	- Author: Petter Ulleland
-	- License: CC BY-SA 4.0
-	- Source page: https://commons.wikimedia.org/wiki/File:Drammen_solnedgang_1.JPG
+  - Source title: Drammen solnedgang 1
+  - Author: Petter Ulleland
+  - License: CC BY-SA 4.0
+  - Source page: [https://commons.wikimedia.org/wiki/File:Drammen_solnedgang_1.JPG](https://commons.wikimedia.org/wiki/File:Drammen_solnedgang_1.JPG)
 
 - Local file: `static/img/drammen/photo-2.jpg`
-	- Source title: Drammenselva vestover fra Ovre Sund
-	- Author: Stian Martinsen
-	- License: CC BY-SA 4.0
-	- Source page: https://commons.wikimedia.org/wiki/File:Drammenselva_vestover_fra_%C3%98vre_Sund.jpg
+  - Source title: Drammenselva vestover fra Ovre Sund
+  - Author: Stian Martinsen
+  - License: CC BY-SA 4.0
+  - Source page: [https://commons.wikimedia.org/wiki/File:Drammenselva_vestover_fra_%C3%98vre_Sund.jpg](https://commons.wikimedia.org/wiki/File:Drammenselva_vestover_fra_%C3%98vre_Sund.jpg)
 
 - Local file: `static/img/drammen/photo-3.jpg`
-	- Source title: Drammen gamle bru
-	- Author: Ezex
-	- License: CC BY-SA 4.0
-	- Source page: https://commons.wikimedia.org/wiki/File:Drammen_gamle_bru.jpg
+  - Source title: Drammen gamle bru
+  - Author: Ezex
+  - License: CC BY-SA 4.0
+  - Source page: [https://commons.wikimedia.org/wiki/File:Drammen_gamle_bru.jpg](https://commons.wikimedia.org/wiki/File:Drammen_gamle_bru.jpg)
