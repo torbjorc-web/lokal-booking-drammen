@@ -1,6 +1,6 @@
 name: Deprecated Tests Workflow
 
-on:
+"on":
   workflow_dispatch:
 
 jobs:
