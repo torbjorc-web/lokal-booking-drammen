@@ -137,7 +137,7 @@ class CreateBookingServiceTests(TestCase):
 		self.assertEqual(booking.status, Booking.Status.CANCELED)
 
 	def test_only_staff_can_change_status(self) -> None:
-		starts_at = timezone.now() + timedelta(days=2)
+		starts_at = timezone.now().replace(hour=10, minute=0, second=0, microsecond=0) + timedelta(days=2)
 		ends_at = starts_at + timedelta(hours=1)
 		booking = create_booking(
 			resource=self.resource,

@@ -111,3 +111,18 @@ textarea {
 .gallery-note {
   margin-top: 10px;
 }
+
+.visit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.visit-grid h3 {
+  margin-top: 0;
+}
+
+.visit-grid ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
