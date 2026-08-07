@@ -1,0 +1,14 @@
+name: Keep Render app awake
+
+on:
+  schedule:
+    # Every 10 minutes; Render free web services spin down after 15 min idle.
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health endpoint
+        run: curl -fsS "${{ vars.APP_URL || 'https://lokal-booking-drammen.onrender.com' }}/healthz/"
