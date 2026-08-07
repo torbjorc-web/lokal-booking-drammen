@@ -12,7 +12,7 @@ def healthz(request):
 
 
 urlpatterns = [
-	path("admin/", admin.site.urls),
+	path(settings.ADMIN_URL, admin.site.urls),
 	path("healthz/", healthz, name="healthz"),
 	path("", TemplateView.as_view(template_name="home.html"), name="home"),
 	path("auth/", include("django.contrib.auth.urls")),

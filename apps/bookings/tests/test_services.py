@@ -108,12 +108,13 @@ class CreateBookingServiceTests(TestCase):
 	def test_cancel_booking_deadline_raises_for_member(self) -> None:
 		starts_at = timezone.now() + timedelta(hours=2)
 		ends_at = starts_at + timedelta(hours=1)
-		booking = create_booking(
+		booking = Booking.objects.create(
 			resource=self.resource,
 			user=self.user,
 			title="Late cancel",
 			starts_at=starts_at,
 			ends_at=ends_at,
+			status=Booking.Status.PENDING,
 		)
 
 		with self.assertRaises(BookingValidationError):
@@ -122,12 +123,13 @@ class CreateBookingServiceTests(TestCase):
 	def test_cancel_booking_allowed_for_staff_override(self) -> None:
 		starts_at = timezone.now() + timedelta(hours=2)
 		ends_at = starts_at + timedelta(hours=1)
-		booking = create_booking(
+		booking = Booking.objects.create(
 			resource=self.resource,
 			user=self.user,
 			title="Staff override",
 			starts_at=starts_at,
 			ends_at=ends_at,
+			status=Booking.Status.PENDING,
 		)
 
 		cancel_booking(booking=booking, actor=self.staff_user)
@@ -135,7 +137,7 @@ class CreateBookingServiceTests(TestCase):
 		self.assertEqual(booking.status, Booking.Status.CANCELED)
 
 	def test_only_staff_can_change_status(self) -> None:
-		starts_at = timezone.now() + timedelta(days=2)
+		starts_at = timezone.now().replace(hour=10, minute=0, second=0, microsecond=0) + timedelta(days=2)
 		ends_at = starts_at + timedelta(hours=1)
 		booking = create_booking(
 			resource=self.resource,

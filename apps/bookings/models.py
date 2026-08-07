@@ -31,7 +31,7 @@ class Booking(models.Model):
 		]
 		constraints = [
 			models.CheckConstraint(
-				check=models.Q(ends_at__gt=models.F("starts_at")),
+				condition=models.Q(ends_at__gt=models.F("starts_at")),
 				name="booking_ends_after_starts",
 			),
 		]

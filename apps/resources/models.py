@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
@@ -40,3 +41,20 @@ class Resource(models.Model):
 
 	def __str__(self) -> str:
 		return self.name
+
+
+class SavedSearch(models.Model):
+	user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="saved_searches")
+	name = models.CharField(max_length=100)
+	query = models.CharField(max_length=120, blank=True)
+	min_capacity = models.PositiveIntegerField(null=True, blank=True)
+	date = models.DateField(null=True, blank=True)
+	start_time = models.TimeField(null=True, blank=True)
+	end_time = models.TimeField(null=True, blank=True)
+	created_at = models.DateTimeField(auto_now_add=True)
+
+	class Meta:
+		ordering = ["-created_at"]
+
+	def __str__(self) -> str:
+		return f"{self.name} ({self.user})"

@@ -100,6 +100,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "accounts.User"
 
+# Secret path for the Django admin, so it isn't reachable at the well-known /admin/ URL in production.
+ADMIN_URL = env("DJANGO_ADMIN_URL", "admin/").strip("/") + "/"
+
 LOGIN_REDIRECT_URL = "dashboard:index"
 LOGOUT_REDIRECT_URL = "home"
 LOGIN_URL = "login"
