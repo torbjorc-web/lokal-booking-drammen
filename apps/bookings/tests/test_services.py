@@ -45,13 +45,14 @@ class CreateBookingServiceTests(TestCase):
 		starts_at = timezone.now().replace(hour=10, minute=0, second=0, microsecond=0) + timedelta(days=1)
 		ends_at = starts_at + timedelta(hours=2)
 
-		booking = create_booking(
-			resource=self.resource,
-			user=self.user,
-			title="Team Standup",
-			starts_at=starts_at,
-			ends_at=ends_at,
-		)
+		with self.captureOnCommitCallbacks(execute=True):
+			booking = create_booking(
+				resource=self.resource,
+				user=self.user,
+				title="Team Standup",
+				starts_at=starts_at,
+				ends_at=ends_at,
+			)
 
 		self.assertEqual(booking.status, Booking.Status.PENDING)
 		self.assertEqual(Booking.objects.count(), 1)
@@ -139,13 +140,14 @@ class CreateBookingServiceTests(TestCase):
 	def test_only_staff_can_change_status(self) -> None:
 		starts_at = timezone.now().replace(hour=10, minute=0, second=0, microsecond=0) + timedelta(days=2)
 		ends_at = starts_at + timedelta(hours=1)
-		booking = create_booking(
-			resource=self.resource,
-			user=self.user,
-			title="Approval",
-			starts_at=starts_at,
-			ends_at=ends_at,
-		)
+		with self.captureOnCommitCallbacks(execute=True):
+			booking = create_booking(
+				resource=self.resource,
+				user=self.user,
+				title="Approval",
+				starts_at=starts_at,
+				ends_at=ends_at,
+			)
 
 		with self.assertRaises(BookingPermissionError):
 			set_booking_status(booking=booking, status=Booking.Status.CONFIRMED, actor=self.user)
@@ -183,3 +185,32 @@ class CreateBookingServiceTests(TestCase):
 				status=Booking.Status.CONFIRMED,
 				actor=self.staff_user,
 			)
+
+	def test_booking_created_email_is_deferred_until_commit(self) -> None:
+		starts_at = (
+			timezone.now().replace(
+				hour=10,
+				minute=0,
+				second=0,
+				microsecond=0,
+			)
+			+ timedelta(days=1)
+		)
+		ends_at = starts_at + timedelta(hours=1)
+
+		with self.captureOnCommitCallbacks(execute=False) as callbacks:
+			create_booking(
+				resource=self.resource,
+				user=self.user,
+				title="Deferred notification",
+				starts_at=starts_at,
+				ends_at=ends_at,
+			)
+
+			self.assertEqual(len(mail.outbox), 0)
+
+		self.assertEqual(len(callbacks), 1)
+
+		callbacks[0]()
+
+		self.assertEqual(len(mail.outbox), 1)
