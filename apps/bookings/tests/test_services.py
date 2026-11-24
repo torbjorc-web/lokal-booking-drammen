@@ -154,3 +154,32 @@ class CreateBookingServiceTests(TestCase):
 		booking.refresh_from_db()
 		self.assertEqual(booking.status, Booking.Status.CONFIRMED)
 		self.assertGreaterEqual(len(mail.outbox), 2)
+
+	def test_canceled_booking_cannot_be_reopened(self) -> None:
+		starts_at = (
+			timezone.now().replace(
+				hour=10,
+				minute=0,
+				second=0,
+				microsecond=0,
+			)
+			+ timedelta(days=2)
+		)
+		ends_at = starts_at + timedelta(hours=1)
+
+		booking = Booking.objects.create(
+			resource=self.resource,
+			user=self.user,
+			title="Canceled booking",
+			starts_at=starts_at,
+			ends_at=ends_at,
+			status=Booking.Status.CANCELED,
+			canceled_at=timezone.now(),
+		)
+
+		with self.assertRaises(BookingValidationError):
+			set_booking_status(
+				booking=booking,
+				status=Booking.Status.CONFIRMED,
+				actor=self.staff_user,
+			)

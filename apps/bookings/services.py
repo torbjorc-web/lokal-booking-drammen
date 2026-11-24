@@ -124,6 +124,9 @@ def set_booking_status(*, booking: Booking, status: str, actor) -> Booking:
 	if status not in dict(Booking.Status.choices):
 		raise BookingValidationError("Invalid booking status.")
 
+	if booking.status == Booking.Status.CANCELED and status != Booking.Status.CANCELED:
+		raise BookingValidationError("Canceled bookings cannot be reopened.")
+
 	booking.status = status
 	if status == Booking.Status.CANCELED and booking.canceled_at is None:
 		booking.canceled_at = timezone.now()
