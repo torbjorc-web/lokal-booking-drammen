@@ -93,7 +93,7 @@ def create_booking(
 	)
 	booking.full_clean()
 	booking.save()
-	send_booking_created_email(booking)
+	transaction.on_commit(lambda: send_booking_created_email(booking))
 	return booking
 
 
