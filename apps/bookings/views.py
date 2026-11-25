@@ -5,12 +5,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 
 from apps.bookings.forms import BookingCreateForm
 from apps.bookings.models import Booking
+from apps.bookings.selectors import get_user_bookings
 from apps.bookings.services import BookingError, cancel_booking, create_booking
 
 
 @login_required
 def index(request: HttpRequest) -> HttpResponse:
-	bookings = Booking.objects.filter(user=request.user).select_related("resource").order_by("-starts_at")
+	bookings = get_user_bookings(user=request.user)
 	return render(request, "bookings/list.html", {"bookings": bookings})
 
 
