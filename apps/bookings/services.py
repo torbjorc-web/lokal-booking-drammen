@@ -112,7 +112,7 @@ def cancel_booking(*, booking: Booking, actor) -> Booking:
 	booking.status = Booking.Status.CANCELED
 	booking.canceled_at = timezone.now()
 	booking.save(update_fields=["status", "canceled_at", "updated_at"])
-	send_booking_status_changed_email(booking)
+	transaction.on_commit(lambda: send_booking_status_changed_email(booking))
 	return booking
 
 
@@ -134,5 +134,5 @@ def set_booking_status(*, booking: Booking, status: str, actor) -> Booking:
 		booking.canceled_at = None
 	booking.full_clean()
 	booking.save()
-	send_booking_status_changed_email(booking)
+	transaction.on_commit(lambda: send_booking_status_changed_email(booking))
 	return booking

@@ -152,7 +152,8 @@ class CreateBookingServiceTests(TestCase):
 		with self.assertRaises(BookingPermissionError):
 			set_booking_status(booking=booking, status=Booking.Status.CONFIRMED, actor=self.user)
 
-		set_booking_status(booking=booking, status=Booking.Status.CONFIRMED, actor=self.staff_user)
+		with self.captureOnCommitCallbacks(execute=True):
+			set_booking_status(booking=booking, status=Booking.Status.CONFIRMED, actor=self.staff_user)
 		booking.refresh_from_db()
 		self.assertEqual(booking.status, Booking.Status.CONFIRMED)
 		self.assertGreaterEqual(len(mail.outbox), 2)
@@ -205,6 +206,61 @@ class CreateBookingServiceTests(TestCase):
 				title="Deferred notification",
 				starts_at=starts_at,
 				ends_at=ends_at,
+			)
+
+			self.assertEqual(len(mail.outbox), 0)
+
+		self.assertEqual(len(callbacks), 1)
+
+		callbacks[0]()
+
+		self.assertEqual(len(mail.outbox), 1)
+
+	def test_cancel_booking_email_is_deferred_until_commit(self) -> None:
+		starts_at = timezone.now() + timedelta(days=2)
+		ends_at = starts_at + timedelta(hours=1)
+
+		booking = Booking.objects.create(
+			resource=self.resource,
+			user=self.user,
+			title="Deferred cancellation notification",
+			starts_at=starts_at,
+			ends_at=ends_at,
+			status=Booking.Status.PENDING,
+		)
+
+		with self.captureOnCommitCallbacks(execute=False) as callbacks:
+			cancel_booking(
+				booking=booking,
+				actor=self.user,
+			)
+
+			self.assertEqual(len(mail.outbox), 0)
+
+		self.assertEqual(len(callbacks), 1)
+
+		callbacks[0]()
+
+		self.assertEqual(len(mail.outbox), 1)
+
+	def test_status_changed_email_is_deferred_until_commit(self) -> None:
+		starts_at = timezone.now() + timedelta(days=2)
+		ends_at = starts_at + timedelta(hours=1)
+
+		booking = Booking.objects.create(
+			resource=self.resource,
+			user=self.user,
+			title="Deferred status notification",
+			starts_at=starts_at,
+			ends_at=ends_at,
+			status=Booking.Status.PENDING,
+		)
+
+		with self.captureOnCommitCallbacks(execute=False) as callbacks:
+			set_booking_status(
+				booking=booking,
+				status=Booking.Status.CONFIRMED,
+				actor=self.staff_user,
 			)
 
 			self.assertEqual(len(mail.outbox), 0)
