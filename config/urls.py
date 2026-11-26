@@ -14,6 +14,7 @@ def healthz(request):
 urlpatterns = [
 	path(settings.ADMIN_URL, admin.site.urls),
 	path("healthz/", healthz, name="healthz"),
+	path("api/v1/", include("apps.api.urls")),
 	path("", TemplateView.as_view(template_name="home.html"), name="home"),
 	path("auth/", include("django.contrib.auth.urls")),
 	path("accounts/", include("apps.accounts.urls")),
