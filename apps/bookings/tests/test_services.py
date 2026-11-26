@@ -121,6 +121,35 @@ class CreateBookingServiceTests(TestCase):
 		with self.assertRaises(BookingValidationError):
 			cancel_booking(booking=booking, actor=self.user)
 
+	def test_user_cannot_cancel_another_users_booking(self) -> None:
+		other_user = get_user_model().objects.create_user(
+			username="bob",
+			password="test-password-123",
+		)
+
+		starts_at = timezone.now() + timedelta(days=1)
+		ends_at = starts_at + timedelta(hours=1)
+
+		booking = Booking.objects.create(
+			resource=self.resource,
+			user=self.user,
+			title="Alice booking",
+			starts_at=starts_at,
+			ends_at=ends_at,
+			status=Booking.Status.PENDING,
+		)
+
+		with self.assertRaises(BookingPermissionError):
+			cancel_booking(
+				booking=booking,
+				actor=other_user,
+			)
+
+		booking.refresh_from_db()
+
+		self.assertEqual(booking.status, Booking.Status.PENDING)
+		self.assertIsNone(booking.canceled_at)
+
 	def test_cancel_booking_allowed_for_staff_override(self) -> None:
 		starts_at = timezone.now() + timedelta(hours=2)
 		ends_at = starts_at + timedelta(hours=1)
