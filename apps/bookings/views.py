@@ -1,11 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404, HttpRequest, HttpResponse
+from django.shortcuts import redirect, render
 
 from apps.bookings.forms import BookingCreateForm
-from apps.bookings.models import Booking
-from apps.bookings.selectors import get_user_bookings
+from apps.bookings.selectors import get_booking_by_id, get_user_bookings
 from apps.bookings.services import BookingError, cancel_booking, create_booking
 
 
@@ -44,7 +44,11 @@ def cancel(request: HttpRequest, booking_id: int) -> HttpResponse:
 	if request.method != "POST":
 		return redirect("bookings:index")
 
-	booking = get_object_or_404(Booking.objects.select_related("resource", "user"), pk=booking_id)
+	try:
+		booking = get_booking_by_id(booking_id=booking_id)
+	except ObjectDoesNotExist as exc:
+		raise Http404 from exc
+
 	try:
 		cancel_booking(booking=booking, actor=request.user)
 		messages.success(request, "Booking canceled.")
