@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from apps.bookings.forms import BookingAdminUpdateForm
 from apps.bookings.models import Booking
 from apps.bookings.services import BookingError, set_booking_status
+from apps.dashboard.selectors import get_dashboard_bookings
 
 
 @staff_member_required
@@ -25,21 +26,18 @@ def index(request: HttpRequest) -> HttpResponse:
 
 @staff_member_required
 def booking_list(request: HttpRequest) -> HttpResponse:
-	queryset = Booking.objects.select_related("resource", "user").order_by("-starts_at")
-
 	status = request.GET.get("status", "").strip()
 	resource_id = request.GET.get("resource", "").strip()
 	user_id = request.GET.get("user", "").strip()
 
-	if status:
-		queryset = queryset.filter(status=status)
-	if resource_id.isdigit():
-		queryset = queryset.filter(resource_id=int(resource_id))
-	if user_id.isdigit():
-		queryset = queryset.filter(user_id=int(user_id))
+	bookings = get_dashboard_bookings(
+		status=status,
+		resource_id=resource_id,
+		user_id=user_id,
+	)
 
 	context = {
-		"bookings": queryset,
+		"bookings": bookings,
 		"filters": {
 			"status": status,
 			"resource": resource_id,
