@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from apps.bookings.models import Booking
-from apps.bookings.selectors import get_user_bookings
+from apps.bookings.selectors import get_booking_by_id, get_user_bookings
 from apps.resources.models import Resource
 
 
@@ -83,3 +83,18 @@ class BookingSelectorTests(TestCase):
                         bookings,
                         [newer_booking, older_booking],
                 )
+
+        def test_get_booking_by_id_returns_matching_booking(self) -> None:
+                booking = Booking.objects.create(
+                        resource=self.resource,
+                        user=self.user,
+                        title="Alice booking",
+                        starts_at=timezone.now() + timedelta(days=1),
+                        ends_at=timezone.now() + timedelta(days=1, hours=1),
+                )
+
+                self.assertEqual(get_booking_by_id(booking_id=booking.id), booking)
+
+        def test_get_booking_by_id_raises_for_missing_booking(self) -> None:
+                with self.assertRaises(Booking.DoesNotExist):
+                        get_booking_by_id(booking_id=0)
