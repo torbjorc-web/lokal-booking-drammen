@@ -1,6 +1,21 @@
 from rest_framework import serializers
 
+from apps.bookings.models import Booking
 from apps.resources.models import Resource
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = [
+            "id",
+            "resource",
+            "title",
+            "notes",
+            "starts_at",
+            "ends_at",
+            "status",
+        ]
 
 
 class ResourceSerializer(serializers.ModelSerializer):
