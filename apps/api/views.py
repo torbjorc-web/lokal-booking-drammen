@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -28,6 +28,16 @@ class ResourceListView(ListAPIView):
 
 
 class BookingListView(ListAPIView):
+    serializer_class = BookingSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Booking.objects.filter(
+            user=self.request.user
+        ).select_related("resource")
+
+
+class BookingDetailView(RetrieveAPIView):
     serializer_class = BookingSerializer
     permission_classes = [IsAuthenticated]
 
